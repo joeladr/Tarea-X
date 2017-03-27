@@ -1,9 +1,8 @@
 ﻿(function () {
     'use strict';
 
-    angular
-        .module('app')
-        .factory('AuthenticationService', AuthenticationService);
+    angular.module('app')
+    .factory('AuthenticationService', AuthenticationService);
 
     AuthenticationService.$inject = ['$http', '$cookies', '$rootScope', '$timeout', 'UserService'];
     function AuthenticationService($http, $cookies, $rootScope, $timeout, UserService) {
@@ -17,8 +16,6 @@
 
         function Login(username, password, callback) {
 
-            /* Dummy authentication for testing, uses $timeout to simulate api call
-             ----------------------------------------------*/
             $timeout(function () {
                 var response;
                 UserService.GetByUsername(username)
@@ -33,16 +30,7 @@
                         }
                         callback(response);
                     });
-            }, 1000);
-
-            /* Use this for real authentication
-             ----------------------------------------------*/
-            //$http.post('/api/authenticate', { username: username, password: password })
-            //    .success(function (response) {
-            //        callback(response);
-            //    });
-
-        }
+            }, 1000); }
 
         function SetCredentials(username, password) {
             var authdata = Base64.encode(username + ':' + password);
@@ -54,10 +42,8 @@
                 }
             };
 
-            // set default auth header for http requests
             $http.defaults.headers.common['Authorization'] = 'Basic ' + authdata;
 
-            // store user details in globals cookie that keeps user logged in for 1 week (or until they logout)
             var cookieExp = new Date();
             cookieExp.setDate(cookieExp.getDate() + 7);
             $cookies.putObject('globals', $rootScope.globals, { expires: cookieExp });
@@ -70,7 +56,7 @@
         }
     }
 
-    // Base64 encoding service used by AuthenticationService
+   
     var Base64 = {
 
         keyStr: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=',
